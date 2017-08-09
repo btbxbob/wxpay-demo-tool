@@ -1,0 +1,9 @@
+{
+    "name": "wxpay-demo-tool",
+    "version": "0.1.0",
+    "lockfileVersion": 1,
+    "requires": true,
+    "dependencies": {
+        "vue": "^2.4.2"
+    }
+}

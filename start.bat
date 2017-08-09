@@ -1,0 +1,1 @@
+call nwjs\nw.exe .

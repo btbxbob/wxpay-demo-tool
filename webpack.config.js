@@ -1,12 +1,23 @@
 const path = require('path');
+const webpack = require('webpack')
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 module.exports = {
-  entry: './src/index.js',
-  target: 'node-webkit',
+  entry: {
+    main: './src/index.js',
+    vendor :[
+      //'nw',
+      'iview',
+      'vue'
+    ]
+  },
+  target: 'web',
   output: {
-    filename: 'bundle.js',
+    //filename: 'bundle.js',
+    filename: `[name].[hash].js`,
     path: path.resolve(__dirname, 'dist'),
-    //publicPath : './dist/'
+    //publicPath : '/dist/'
   },
   resolve: {
     alias: {
@@ -41,8 +52,25 @@ module.exports = {
         query: {
           name: '[name].[ext]?[hash]'
         }
+      },
+      {
+        test: /\.html$/,
+        loader: 'html-loader'
       }
     ]
-  }
-  
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      title: 'wxpay demo tool',
+      template: './src/index.ejs'
+    }),
+    //new CleanWebpackPlugin(['dist']),
+    new webpack.HashedModuleIdsPlugin(),
+    new webpack.optimize.CommonsChunkPlugin({
+       name: 'vendor'
+     }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'runtime'
+    })
+  ]
 };

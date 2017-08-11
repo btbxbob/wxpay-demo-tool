@@ -47,11 +47,9 @@
                     <Submenu name="1">
                         <template slot="title">
                             <Icon type="ios-navigate"></Icon>
-                            导航一
+                            {{ some_string }}
                         </template>
-                        <Menu-item name="1-1">选项 1</Menu-item>
-                        <Menu-item name="1-2">选项 2</Menu-item>
-                        <Menu-item name="1-3">选项 3</Menu-item>
+                        <Menu-item :name="index" v-for="(item,index) in api_template_data" v-bind:key="item.key" v-on:click="show_content">{{ item.descript }}</Menu-item>
                     </Submenu>
                     <Submenu name="2">
                         <template slot="title">
@@ -76,12 +74,10 @@
                 <div class="layout-breadcrumb">
                     <Breadcrumb>
                         <Breadcrumb-item href="#">首页</Breadcrumb-item>
-                        <Breadcrumb-item href="#">应用中心</Breadcrumb-item>
-                        <Breadcrumb-item>某应用</Breadcrumb-item>
                     </Breadcrumb>
                 </div>
                 <div class="layout-content">
-                    <div class="layout-content-main">内容区域</div>
+                    <div class="layout-content-main" is="TemplateContent">点击左侧菜单打开接口模板</div>
                 </div>
                 <div class="layout-copy">
                     2011-2016 &copy; TalkingData
@@ -91,7 +87,38 @@
     </div>
 </template>
 <script>
+    import TemplateContent from './template_content.vue'
+    
     export default {
-        
+        data(){
+        return {
+            some_string: "测试字符串",
+            //title_list: this.api_template_list 
+        }
+        },
+        created(){
+        },
+        methods:{
+            requireAll( requireContext ) {
+                return requireContext.keys().map( requireContext );
+            },
+            show_content(event){
+                if(event){
+                    this.main_content="test"
+                }
+            }
+        },
+        computed:{
+            api_template_data: function(){
+                function requireAll( requireContext ) {
+                    return requireContext.keys().map( requireContext );
+                }
+                var modules = requireAll(require.context('../api_template/',true,/\.json$/));
+                return modules
+            }
+        },
+        components: {
+            TemplateContent
+        }
     }
 </script>

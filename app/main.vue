@@ -23,7 +23,7 @@
         color: #9ea7b4;
     }
     .layout-menu-left{
-        background: #464c5b;
+        background: #fff;
     }
     .layout-header{
         height: 60px;
@@ -33,7 +33,7 @@
     .layout-logo-left{
         width: 90%;
         height: 30px;
-        background: #5b6270;
+        background: url(https://pay.weixin.qq.com/wiki/doc/api/img/logo.png?v=20161227) no-repeat;
         border-radius: 3px;
         margin: 15px auto;
     }
@@ -42,31 +42,27 @@
     <div class="layout">
         <Row type="flex">
             <i-col span="5" class="layout-menu-left">
-                <Menu active-name="1-2" theme="dark" width="auto" :open-names="['1']">
+                <Menu theme="light" width="auto" :open-names="['1']">
                     <div class="layout-logo-left"></div>
-                    <Submenu name="1">
-                        <template slot="title">
-                            <Icon type="ios-navigate"></Icon>
-                            {{ some_string }}
+                    <MenuGroup v-for="(item_group,index) in api_template_tree[0].children" v-bind:key="item_group.key" :title="item_group.title">
+                        <template v-for="(item_sub,index) in item_group.children">
+                            <template v-if="item_sub.children.length==0">
+                                <Menu-item :name="item_sub.title">
+                                    {{ api_template_data[item_sub.origin_index].descript }}
+                                    </Menu-item>
+                            </template>
+                            <template v-else>
+                                <Submenu :name="item_sub.title" >
+                                <template slot="title">
+                                    {{ item_sub.title }}
+                                </template>
+                                <Menu-item :name="item.title" v-for="item in item_sub.children" v-bind:key="item.key">
+                                    {{ api_template_data[item.origin_index].descript }}
+                                    </Menu-item>
+                                </Submenu>
+                            </template>
                         </template>
-                        <Menu-item :name="index" v-for="(item,index) in api_template_data" v-bind:key="item.key" v-on:click="show_content">{{ item.descript }}</Menu-item>
-                    </Submenu>
-                    <Submenu name="2">
-                        <template slot="title">
-                            <Icon type="ios-keypad"></Icon>
-                            导航二
-                        </template>
-                        <Menu-item name="2-1">选项 1</Menu-item>
-                        <Menu-item name="2-2">选项 2</Menu-item>
-                    </Submenu>
-                    <Submenu name="3">
-                        <template slot="title">
-                            <Icon type="ios-analytics"></Icon>
-                            导航三
-                        </template>
-                        <Menu-item name="3-1">选项 1</Menu-item>
-                        <Menu-item name="3-2">选项 2</Menu-item>
-                    </Submenu>
+                    </MenuGroup>
                 </Menu>
             </i-col>
             <i-col span="19">
@@ -77,10 +73,10 @@
                     </Breadcrumb>
                 </div>
                 <div class="layout-content">
-                    <div class="layout-content-main" is="TemplateContent">点击左侧菜单打开接口模板</div>
+                    <div class="layout-content-main" is="TemplateContent" :api_template_tree='api_template_tree'>点击左侧菜单打开接口模板</div>
                 </div>
                 <div class="layout-copy">
-                    2011-2016 &copy; TalkingData
+                    2011-2016 &copy; 
                 </div>
             </i-col>
         </Row>
@@ -88,7 +84,13 @@
 </template>
 <script>
     import TemplateContent from './template_content.vue'
+    import dataTree from 'data-tree'
+    //import PATH from 'path'
     
+    function requireAll( requireContext ) {
+                return requireContext.keys().map( requireContext );
+    }
+
     export default {
         data(){
         return {
@@ -97,11 +99,9 @@
         }
         },
         created(){
+            
         },
         methods:{
-            requireAll( requireContext ) {
-                return requireContext.keys().map( requireContext );
-            },
             show_content(event){
                 if(event){
                     this.main_content="test"
@@ -109,12 +109,61 @@
             }
         },
         computed:{
+            api_template_context: function(){
+                return require.context('../api_template/',true,/\.json$/)
+            },
             api_template_data: function(){
                 function requireAll( requireContext ) {
                     return requireContext.keys().map( requireContext );
                 }
-                var modules = requireAll(require.context('../api_template/',true,/\.json$/));
+                var modules = requireAll(this.api_template_context);
                 return modules
+            },
+            api_template_tree: function(){
+                var tree=dataTree.create();
+                var rootNode=tree.insert({
+                    key: '#root',
+                    value: {name: 'root', something:'1'}
+                });
+                this.api_template_context.keys().forEach(function(i,index){
+                    console.log(i)
+                    //2.
+                    var cNode=rootNode
+                    i.split('/').forEach(function(m,n,o){
+                        //console.log(o.length)
+                        if (m =='.') return;
+                        var data={name: m}
+                        var tryNode=tree.traverser().searchDFS(function(node_info){
+                            return node_info.key===n+m
+                        })
+                        console.log(tryNode)
+                        
+                        if (tryNode) {
+                            cNode=tryNode
+                        }else{
+                            //if this is the last one, we need more data
+                            if (n==o.length-1) {
+                                data.origin_index=index
+                                data.path=i
+                            }
+                            cNode=tree.insertToNode(cNode,
+                            {
+                                key: n+m,
+                                value: data
+                            })
+                        }
+                    })
+                })
+                var result_tree=tree.export(function(data){
+                    return {
+                        title: data.value.name,
+                        expand: true,
+                        origin_index: data.value.origin_index,
+                        path: data.value.path
+                        }
+                })
+                console.log(result_tree)
+                return [result_tree]
             }
         },
         components: {

@@ -1,8 +1,10 @@
 <template>
-  <div>点击左侧菜单打开接口模板</div>
+  <div>
+    <Tree :data="api_template_tree"></Tree>
+  </div>
 </template>
 <script>
 export default {
-  
+  props:['api_template_tree']
 }
 </script>

@@ -1,10 +1,10 @@
 <template>
   <div>
-    <Tree :data="api_template_tree"></Tree>
+    {{ api_template_content }}
   </div>
 </template>
 <script>
 export default {
-  props:['api_template_tree']
+  props:['api_template_content']
 }
 </script>

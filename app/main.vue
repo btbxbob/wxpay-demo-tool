@@ -42,12 +42,12 @@
     <div class="layout">
         <Row type="flex">
             <i-col span="5" class="layout-menu-left">
-                <Menu theme="light" width="auto" :open-names="['1']">
+                <Menu theme="light" width="auto" v-on:on-select="menu_select">
                     <div class="layout-logo-left"></div>
                     <MenuGroup v-for="(item_group,index) in api_template_tree[0].children" v-bind:key="item_group.key" :title="item_group.title">
                         <template v-for="(item_sub,index) in item_group.children">
                             <template v-if="item_sub.children.length==0">
-                                <Menu-item :name="item_sub.title">
+                                <Menu-item :name="item_sub.origin_index">
                                     {{ api_template_data[item_sub.origin_index].descript }}
                                     </Menu-item>
                             </template>
@@ -56,7 +56,7 @@
                                 <template slot="title">
                                     {{ item_sub.title }}
                                 </template>
-                                <Menu-item :name="item.title" v-for="item in item_sub.children" v-bind:key="item.key">
+                                <Menu-item :name="item.origin_index" v-for="item in item_sub.children" v-bind:key="item.key">
                                     {{ api_template_data[item.origin_index].descript }}
                                     </Menu-item>
                                 </Submenu>
@@ -73,7 +73,7 @@
                     </Breadcrumb>
                 </div>
                 <div class="layout-content">
-                    <div class="layout-content-main" is="TemplateContent" :api_template_tree='api_template_tree'>点击左侧菜单打开接口模板</div>
+                    <div class="layout-content-main" is="TemplateContent" :api_template_content='api_template_content'>点击左侧菜单打开接口模板</div>
                 </div>
                 <div class="layout-copy">
                     2011-2016 &copy; 
@@ -95,7 +95,7 @@
         data(){
         return {
             some_string: "测试字符串",
-            //title_list: this.api_template_list 
+            api_template_content:"{}"
         }
         },
         created(){
@@ -106,6 +106,9 @@
                 if(event){
                     this.main_content="test"
                 }
+            },
+            menu_select(name){
+                this.api_template_content=this.api_template_data[name]
             }
         },
         computed:{

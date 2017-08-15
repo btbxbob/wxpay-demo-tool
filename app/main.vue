@@ -104,10 +104,14 @@
             return {
                 some_string: "测试字符串",
                 api_template_content: "{}",
+                settings:{
+                    mch_id:"",
+                    appid:"",
+                    key:""
+                }
             }
         },
         created() {
-            this.settings={}
         },
         methods: {
             show_content(event) {

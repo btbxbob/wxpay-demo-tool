@@ -12,7 +12,7 @@ module.exports = {
       'vue'
     ]
   },
-  target: 'web',
+  target: 'node-webkit',
   output: {
     //filename: 'bundle.js',
     filename: `[name].[hash].js`,

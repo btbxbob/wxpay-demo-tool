@@ -1,1 +1,1 @@
-call nwjs\nw.exe .
+call nwjs-sdk\nw.exe .

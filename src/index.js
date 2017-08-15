@@ -5,7 +5,7 @@ import iView from 'iview'
 import 'iview/dist/styles/iview.css'
 //import dir from 'node-dir'
 import Main from '../app/main.vue'
-//import nw from 'nw'
+import nw from 'nw'
 
 Vue.config.debug = true
 Vue.use(iView)

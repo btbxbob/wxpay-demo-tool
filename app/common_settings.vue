@@ -12,15 +12,11 @@
           <Form-item label="秘钥">
               <Input v-model="settings.key"></Input>
           </Form-item>
-          <Form-item label="证书（pem文件）">
-              <Upload v-model="settings.cert" action="about:blank">
-                  <Button type="ghost" icon="ios-cloud-upload-outline">上传文件</Button>
-              </Upload>
-          </Form-item>
           <Form-item>
             <Button type="primary" @click="debug_button">保存</Button>
         </Form-item>
       </Form>
+      {{ settings }}
       </Col>
       </Row>
   </div>

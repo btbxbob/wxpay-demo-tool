@@ -11,7 +11,7 @@
     "vue": "^2.4.2"
   },
   "description": "",
-  "main": "dist/index.html",
+  "main": "http://127.0.0.1:8080",
   "devDependencies": {
     "babel-core": "^6.0.0",
     "babel-loader": "^7.0.0",
@@ -46,7 +46,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
-    "dev": "cross-env NODE_ENV=development webpack-dev-server -d --open --hot --progress --color"
+    "dev": "cross-env NODE_ENV=development webpack-dev-server -d --hot --progress --color"
   },
   "repository": {
     "type": "git",

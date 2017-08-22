@@ -84,6 +84,10 @@
                 </i-col>
             </Row>
         </Tab-pane>
+        <Tab-pane label="其他工具">
+            <MiscTools>
+            </MiscTools>
+        </Tab-pane>
     </Tabs>
 
 </div>
@@ -92,6 +96,7 @@
 <script>
     import CommonSettings from './common_settings.vue'
     import TemplateContent from './template_content.vue'
+    import MiscTools from './misc_tools.vue'
     import dataTree from 'data-tree'
     //import PATH from 'path'
 
@@ -107,7 +112,9 @@
                 settings:{
                     mch_id:"",
                     appid:"",
-                    key:""
+                    key:"",
+                    cert:"",
+                    cert_key:"",
                 }
             }
         },
@@ -190,7 +197,8 @@
         },
         components: {
             TemplateContent,
-            CommonSettings
+            CommonSettings,
+            MiscTools
         }
     }
 </script>

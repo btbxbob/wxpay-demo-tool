@@ -59,6 +59,7 @@ module.exports = {
       }
     ]
   },
+  devtool:"eval",
   plugins: [
     new HtmlWebpackPlugin({
       title: 'wxpay demo tool',

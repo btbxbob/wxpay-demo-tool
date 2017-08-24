@@ -6,9 +6,14 @@
   "dependencies": {
     "data-tree": "git+https://github.com/btbxbob/Data-Tree.git",
     "directory-tree": "^2.0.0",
+    "highlight.js": "^9.12.0",
     "iview": "^2.0.0",
+    "js2xmlparser": "^3.0.0",
     "node-dir": "github:btbxbob/node-dir",
-    "vue": "^2.4.2"
+    "vue": "^2.4.2",
+    "vue-highlight.js": "^2.0.0",
+    "vue-highlightjs": "^1.3.3",
+    "xml-beautifier": "^0.3.0"
   },
   "description": "",
   "main": "http://127.0.0.1:8080",
@@ -60,5 +65,9 @@
     "url": "https://github.com/btbxbob/wxpay-demo-tool/issues"
   },
   "homepage": "https://github.com/btbxbob/wxpay-demo-tool#readme",
-  "node-remote": "<all_urls>"
+  "node-remote": "<all_urls>",
+  "chromium-args": "--load-extension='./vue-devtools/'",
+  "webkit": {
+    "plugin": true
+  }
 }

@@ -12,14 +12,7 @@
                 <Form-item label="秘钥">
                     <Input v-model="settings.key"></Input>
                 </Form-item>
-                <Form-item label="证书-公钥">
-                    <Input type="file" @change="get_url"></Input>
-                </Form-item>
-                <Form-item label="证书-私钥">
-                    <Upload @click.prevent="get_url">
-                        <Button>上传</Button>
-                    </Upload>
-                </Form-item>
+
                 <Form-item>
                     <Button type="primary" @click="debug_button">保存</Button>
                 </Form-item>

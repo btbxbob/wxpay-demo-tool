@@ -48,14 +48,15 @@
         </Tab-pane>
         <Tab-pane label="接口调试">
             <Row type="flex">
-                <i-col span="5" class="layout-menu-left">
+                <i-col span="7" class="layout-menu-left">
                     <Menu theme="light" width="auto" v-on:on-select="menu_select">
                         <div class="layout-logo-left"></div>
+                        <Cascader :data="api_template_tree[0].children" v-on:on-change="cascader_select"></Cascader>
                         <MenuGroup v-for="(item_group,index) in api_template_tree[0].children" v-bind:key="item_group.key" :title="item_group.title">
                             <template v-for="(item_sub,index) in item_group.children">
                                 <template v-if="item_sub.children.length==0">
                                     <Menu-item :name="item_sub.origin_index">
-                                        {{ api_template_data[item_sub.origin_index].descript }}
+                                        {{ item_sub.label }}
                                     </Menu-item>
                                 </template>
                                 <template v-else>
@@ -64,7 +65,7 @@
                                             {{ item_sub.title }}
                                         </template>
                                         <Menu-item :name="item.origin_index" v-for="item in item_sub.children" v-bind:key="item.key">
-                                            {{ api_template_data[item.origin_index].descript }}
+                                            {{ item.label }}
                                         </Menu-item>
                                     </Submenu>
                                 </template>
@@ -72,7 +73,7 @@
                         </MenuGroup>
                     </Menu>
                 </i-col>
-                <i-col span="19">
+                <i-col span="17">
                     <div class="layout-header"></div>
                     <div class="layout-breadcrumb"></div>
                     <div class="layout-content">
@@ -126,6 +127,9 @@
                     this.main_content = "test"
                 }
             },
+            cascader_select(value, selectedData){
+                this.api_template_content = this.api_template_data[value[value.length-1]]
+            },
             menu_select(name) {
                 this.api_template_content = this.api_template_data[name]
             },
@@ -153,39 +157,46 @@
                         something: '1'
                     }
                 });
+                var father=this
                 this.api_template_context.keys().forEach(function (i, index) {
-                    console.log(i)
-                    //2.
+                    console.log(i,index)
                     var cNode = rootNode
+                    //samePath: 只要有一个不匹配，全都不算同路径
+                    var samePath=true
                     i.split('/').forEach(function (m, n, o) {
-                        //console.log(o.length)
+                        
                         if (m == '.') return;
                         var data = {
-                            name: m
+                            name: m,
+                            label: m
                         }
                         var tryNode = tree.traverser().searchDFS(function (node_info) {
+                            //console.log(node_info.key,n+m)
                             return node_info.key === n + m
                         })
-                        console.log(tryNode)
-
-                        if (tryNode) {
+                        
+                        if (tryNode && samePath) {
                             cNode = tryNode
                         } else {
                             //if this is the last one, we need more data
                             if (n == o.length - 1) {
                                 data.origin_index = index
+                                data.label=father.api_template_data[index].descript
                                 data.path = i
                             }
                             cNode = tree.insertToNode(cNode, {
                                 key: n + m,
                                 value: data
                             })
+                            samePath=false
                         }
                     })
                 })
                 var result_tree = tree.export(function (data) {
                     return {
                         title: data.value.name,
+                        label: data.value.label,
+                        value: data.value.origin_index,
                         expand: true,
                         origin_index: data.value.origin_index,
                         path: data.value.path

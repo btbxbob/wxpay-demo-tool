@@ -6,6 +6,10 @@ import 'iview/dist/styles/iview.css'
 //import dir from 'node-dir'
 import Main from '../app/main.vue'
 import nw from 'nw'
+import VueHightlightJS from 'vue-highlightjs'
+import 'highlight.js/styles/monokai-sublime.css'
+
+Vue.use(VueHightlightJS)
 
 Vue.config.debug = true
 Vue.use(iView)
